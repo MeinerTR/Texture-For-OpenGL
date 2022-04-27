@@ -8,7 +8,8 @@ unsigned char *CWD;
 GLFWwindow *Window;
 
 unsigned int SCR_W = 640,
-             SCR_H = 480;
+             SCR_H = 480,
+             CurrentPic = 0;
 
 #define ERROR(MSG) {perror(#MSG), exit(-1);}
 
@@ -23,10 +24,23 @@ void Reshape(GLFWwindow* Window, const unsigned int NEW_W, const unsigned int NE
     glfwSwapBuffers(Window);
 }
 
+void ShowTexture() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    unsigned int *ASD = GetTexture(
+        CWD, "trying.font", CurrentPic
+    ); ChangeScaleTo(5.0f, SCR_W, SCR_H);
+    DisplayTexture(ASD, 0, 0, 16, 16);
+    free(ASD); glfwSwapBuffers(Window);
+}
+
 void HandleKeyboard(GLFWwindow* window, const unsigned int Key, const unsigned int STAT, const unsigned int A, const unsigned int M) {
     if (A == 1) {
         if (Key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(Window, 1);
+        } else if (Key == GLFW_KEY_Q) {
+            CurrentPic--; ShowTexture();
+        } else if (Key == GLFW_KEY_E) {
+            CurrentPic++; ShowTexture();
         }
     }
 }
@@ -55,12 +69,7 @@ void InitOpenGL() {
 int main(void) { InitOpenGL();
     if (!(CWD = getcwd(NULL, 0)))
     ERROR(Unable to get the CWD!)
-    glClear(GL_COLOR_BUFFER_BIT);
-    unsigned int *ASD = Texture(
-        CWD, "trying.font", 16, 16
-    ); ChangeScaleTo(5.0f, SCR_W, SCR_H);
-    DisplayTexture(ASD, 0, 0, 16, 16);
-    free(ASD); glfwSwapBuffers(Window);
+    ShowTexture();
     while (!glfwWindowShouldClose(Window)) {
         glfwPollEvents();                  }
 }
