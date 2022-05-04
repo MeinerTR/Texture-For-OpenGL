@@ -21,6 +21,19 @@ unsigned int Len(const unsigned char *STR) {
     while (CHR != '\n') {CHR = STR[Output];
         Output++;} return Output;
 }
+static unsigned int GetLength(unsigned char *_CWD, const unsigned char *FName, const unsigned int TheLine) {
+    unsigned char DIR[Len(_CWD) + Len(FName)];
+    char CHR; sprintf(DIR, "%s/%s", _CWD, FName);
+    FILE *File = fopen(DIR, "rb");
+    if (!File) ERROR(Unable to open the file!)
+    unsigned int Output = 0;
+    while (CHR != -2) {
+        CHR = fgetc(File);
+        if (CHR == '\n') {
+            Output++;    }
+        if (CHR == EOF) {CHR = -2;}
+    } return Output;
+}
 unsigned int *GetTexture(unsigned char *_CWD, const unsigned char *FName, const unsigned int TheLine) {
     unsigned char DIR[Len(_CWD) + Len(FName)]; char CHR;
     sprintf(DIR, "%s/%s", _CWD, FName);
