@@ -41,7 +41,7 @@ unsigned int *GetTexture(unsigned char *_CWD, const unsigned char *FName, const 
     FILE *File = fopen(DIR, "rb");
     unsigned int Length = GetLength(_CWD, FName, TheLine);
     unsigned int *Output = (unsigned int *) calloc (
-        Length * 1025, sizeof(unsigned int)              );
+        1024, sizeof(unsigned int)              );
     fseek(File, 1025 * TheLine, SEEK_CUR);
     fread(Output, sizeof(unsigned int), 1024, File);
     fclose(File); return Output;
